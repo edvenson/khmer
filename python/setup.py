@@ -1,4 +1,8 @@
-from distutils.core import setup, Extension
+from distribute_setup import use_setuptools
+use_setuptools()
+
+from setuptools import setup, Extension
+#from distutils.core import setup, Extension
 
 # the c++ extension module (needs to be linked in with ktable.o ...)
 extension_mod = Extension("khmer._khmermodule",
@@ -62,4 +66,6 @@ setup(name = "khmer", version = "0.4",
       url = 'http://ged.msu.edu/',
       license='New BSD License',
       packages = [py_mod,],
+      setup_requires=['nose>=1.2.1'],
+      test_suite = 'nose.collector',
       ext_modules = [extension_mod,])
