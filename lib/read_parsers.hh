@@ -22,6 +22,8 @@ extern "C"
 
 #ifdef __linux__
 #   include <sys/types.h>
+#elif __APPLE__
+#   include <sys/types.h>
 #else
 #   error "Your current operating system is not supported by this software."
 #endif
@@ -63,7 +65,7 @@ private:
 
     uint32_t			    _number_of_threads;
     uint32_t			    _thread_counter;
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
     std:: map< pid_t, uint32_t >    _thread_id_map;
 #else
     // TODO: Maybe try something with pthreads for the general case.

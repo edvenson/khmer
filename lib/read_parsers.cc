@@ -45,10 +45,6 @@ get_thread_id( )
     pid_t native_thread_id = syscall( SYS_gettid ); 
     std:: map< pid_t, uint32_t > :: iterator match;
 
-#else
-    // TODO: Maybe try something with pthread_self for the general case.
-#endif
-
     match = _thread_id_map.find( native_thread_id );
     if (match == _thread_id_map.end( ))
     {
@@ -77,6 +73,11 @@ get_thread_id( )
     }
 
     return (*match).second;
+
+#else
+    // TODO: Maybe try something with pthread_self for the general case.
+    return 0;
+#endif
 }
 
 
@@ -1161,15 +1162,21 @@ get_parser(
     {
 	size_t	alignment   = 0;	// 512 bytes is Chaotic Good?
 
-	ifile_handle	= open( ifile_name.c_str( ), ifile_flags | O_DIRECT );
+	ifile_handle	= open( ifile_name.c_str( ), ifile_flags
+    #ifdef __linux
+    | O_DIRECT
+    #endif
+    );
 	if (-1 != ifile_handle)
 	{
+            #ifdef __linux__
 	    if (0 > ioctl( ifile_handle, BLKSSZGET, &alignment ))
 	    {
 		close( ifile_handle );
 		ifile_handle = -1;
 		alignment    = 0;
 	    }
+            #endif
 	}
 	if (-1 == ifile_handle)
 	{
