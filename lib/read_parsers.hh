@@ -174,7 +174,7 @@ private:
 
 };
 
-
+#ifdef USE_BZ2
 struct Bz2StreamReader : public IStreamReader
 {
     
@@ -191,6 +191,7 @@ private:
     BZFILE *		    _block_handle;
 
 };
+#endif //USE_BZ2
 
 
 struct CacheSegmentPerformanceMetrics : public IPerformanceMetrics

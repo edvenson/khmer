@@ -32,6 +32,10 @@ WITH_INTERNAL_METRICS=false
 # Set this variable to true if you wish to build the Python wrapper with Cython rather than the directly using the Python C API.
 USE_CYTHON=false
 
+# Use BZip2?
+# Set this to true if you want to use BZip2
+USE_BZ2=false
+
 CXXFLAGS=
 CXX_WARNING_FLAGS=-Wall
 CXX_OPTIMIZATION_FLAGS=-O3
@@ -89,6 +93,10 @@ ifeq ($(USE_CYTHON), true)
 CYTHON_ENABLED_BOOL=True
 else
 CYTHON_ENABLED_BOOL=False
+endif
+
+ifeq ($(USE_BZ2), true)
+CXXFLAGS+= -DUSE_BZ2
 endif
 
 all: lib_files python_files

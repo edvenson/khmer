@@ -158,7 +158,7 @@ GzStreamReader( int const fd )
 
 }
 
-
+#ifdef USE_BZ2
 Bz2StreamReader::
 Bz2StreamReader( int const fd )
 : IStreamReader( )
@@ -171,6 +171,7 @@ Bz2StreamReader( int const fd )
     _block_handle = NULL;
 
 }
+#endif
 
 
 IStreamReader::
@@ -198,6 +199,7 @@ GzStreamReader::
 }
 
 
+#ifdef USE_BZ2
 Bz2StreamReader::
 ~Bz2StreamReader( )
 {
@@ -209,6 +211,7 @@ Bz2StreamReader::
     _stream_handle = NULL;
 
 }
+#endif
 
 
 bool const
@@ -302,6 +305,7 @@ read_into_cache( uint8_t * const cache, uint64_t const cache_size )
 }
 
 
+#ifdef USE_BZ2
 uint64_t const
 Bz2StreamReader::
 read_into_cache( uint8_t * const cache, uint64_t const cache_size )
@@ -383,6 +387,7 @@ read_into_cache( uint8_t * const cache, uint64_t const cache_size )
 
     return nbread_total;
 }
+#endif
 
 
 CacheSegmentPerformanceMetrics::
@@ -1146,6 +1151,7 @@ get_parser(
 	stream_reader	= new GzStreamReader( ifile_handle );
 	rechop		= true;
     }
+#ifdef USE_BZ2
     else if ("bz2" == ext)
     {
 	ifile_handle    = open( ifile_name.c_str( ), ifile_flags );
@@ -1158,6 +1164,7 @@ get_parser(
 	stream_reader	= new Bz2StreamReader( ifile_handle );
 	rechop		= true;
     }
+#endif //USE_BZ2
     else // Uncompressed file.
     {
 	size_t	alignment   = 0;	// 512 bytes is Chaotic Good?
