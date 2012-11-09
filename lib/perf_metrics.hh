@@ -30,13 +30,21 @@ struct IPerformanceMetrics
     
     inline void	    start_timers( )
     {
+    #ifdef __linux__
 	clock_gettime( CLOCK_REALTIME, &_temp_clock_start );
 	clock_gettime( CLOCK_THREAD_CPUTIME_ID, &_temp_cpu_start );
+    #else
+    //TODO
+    #endif
     }
     inline void	    stop_timers( )
     {
+    #ifdef __linux__
 	clock_gettime( CLOCK_THREAD_CPUTIME_ID, &_temp_cpu_stop );
 	clock_gettime( CLOCK_REALTIME, &_temp_clock_stop );
+    #else
+    //TODO
+    #endif
     }
     virtual void    accumulate_timer_deltas( uint32_t metrics_key )	= 0;
     
